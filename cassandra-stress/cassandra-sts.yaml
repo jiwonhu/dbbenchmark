@@ -16,7 +16,7 @@ spec:
         app: cassandra
     spec:
       #nodeSelector:
-      #  kubernetes.io/hostname: uhn7kl3rbrbwk011.rmnkiba.local
+      #  kubernetes.io/hostname: blah
       containers:
       - name: cassandra
         image: gcr.io/google-samples/cassandra:v13
@@ -76,8 +76,6 @@ spec:
 
       volumes:
       - name: cassandra-vol
-        #hostPath:
-        #  path: /data/mysql
         persistentVolumeClaim:
           claimName: cassandra-pvc
 ---
