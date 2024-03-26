@@ -1,5 +1,6 @@
-# cassandra-stress benchmarking sample
+# Cassandra-stress Benchmarking Sample
 Deploys a single-pod in k8s cluster. Runs Cassandra container and cassandra-stress container so that they can share the same ip.
+
 It works well in IPv4 cluster, but hits an issue in IPv6 cluster. Cassandra could not fetch its own hostname.
 
 ## Run Cassandra stress tests
