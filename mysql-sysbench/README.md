@@ -20,8 +20,8 @@ mysql-db=sysbench
 threads=100
 ```
 
-### 1. Read only with 30, 50 and 100 threads
-Play with different threads, table size and numbers
+### 1. Read only
+Play with different thread counts such as 1, 30, 50 or 100. Differnet table size and numbers
 ```shell
 sysbench --config-file=config --table_size=25000 --tables=100 oltp_read_only prepare
 sysbench --config-file=config --table_size=25000 --tables=100 oltp_read_only --time=180 --threads=30 --report-interval=1
