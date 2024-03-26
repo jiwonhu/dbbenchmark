@@ -1,3 +1,4 @@
+# A simple statefulset deploying cassandra and cassandra-stress
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
