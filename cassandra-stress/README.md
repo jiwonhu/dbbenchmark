@@ -28,4 +28,4 @@ Read write ratio is 1:1 by default.
 cassandra-stress mixed n=200000 -rate threads=30
 ```
 
-To clean up, `kubectl delete` the yaml then `kubectl apply`.
+To clean up and start new, `kubectl delete` the yaml to remove the PV, then `kubectl apply`.
