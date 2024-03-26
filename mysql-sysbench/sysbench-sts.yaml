@@ -1,0 +1,98 @@
+# load mysql:8.0 and severalnines/sysbench images
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sysbench
+  labels:
+    app: sysbench-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sysbench-mysql
+  template:
+    metadata:
+      labels:
+        app: sysbench-mysql
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: uhn7kl3rbrbwk011.rmnkiba.local
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        imagePullPolicy: IfNotPresent
+        #args: ["--default_authentication_plugin=mysql_native_password"]
+        resources:
+          requests:
+            memory: 2Gi
+            cpu: 2
+          limits:
+            memory: 2Gi
+            cpu: 2
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: sysbench
+        - name: MYSQL_DATABASE
+          value: sysbench
+        - name: MYSQL_USER
+          value: sysbench
+        - name: MYSQL_PASSWORD
+          value: sysbench
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+        - name: mysql-config-vol
+          mountPath: /etc/mysql/my.cnf
+          subPath: my.cnf
+
+      - name: sysbench
+        image: severalnines/sysbench
+        imagePullPolicy: IfNotPresent
+        command: ["sleep", "infinity"]
+        env:
+        - name: MYSQL_SERVER
+          value: localhost
+        - name: MYSQL_DATABASE
+          value: sysbench
+        - name: MYSQL_USER
+          value: sysbench
+        - name: MYSQL_PASSWORD
+          value: sysbench
+        - name: SYSBENCH_TABLE_SIZE
+          value: '100000'
+        - name: SYSBENCH_NUM_THREADS
+          value: '30'
+        - name: SYSBENCH_MAX_TIME
+          value: '0'
+        - name: SYSBENCH_MAX_REQUESTS
+          value: '1000000'
+
+      volumes:
+      - name: mysql-persistent-storage
+        #hostPath:
+        #  path: /data
+        #  type: directory
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+      - name: mysql-config-vol
+        configMap:
+          name: mysql-config
+          items:
+          - key: my.cnf
+            path: my.cnf
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  labels:
+    app: sysbench-mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 40Gi
