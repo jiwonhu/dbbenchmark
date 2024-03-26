@@ -1,4 +1,6 @@
-# load mysql:8.0 and severalnines/sysbench images
+# Creates a pod of mysql 8.0 and sysbench
+# Read readme for sysbench benchmarking cmds
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -15,8 +17,8 @@ spec:
       labels:
         app: sysbench-mysql
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: uhn7kl3rbrbwk011.rmnkiba.local
+      #nodeSelector:
+      #  kubernetes.io/hostname: blah
       containers:
       - name: mysql
         image: mysql:8.0
